@@ -1,5 +1,6 @@
 // Reference types: slice, map, channel, interface, function.
 // Zero value of a reference type is nil.
+// Key point: When we use append() function, whenever the length of slice reaches the capacity of slice. Go will create a NEW backing array with 2x capacity and copy the values of OLD backing array to the new one.
 
 package main
 
@@ -7,6 +8,10 @@ import (
 	"fmt"
 	"unicode/utf8"
 )
+
+type user struct {
+	likes int
+}
 
 func main() {
 	// ----------------------
@@ -91,7 +96,7 @@ func main() {
 	// 3 word data structure: first one points to nil, second and last are zero.
 	var data []string
 
-	// What if I do data := string{}? Is it the same?
+	// What if I do data := []string{}? Is it the same?
 	// No because data in this case is not set to its zero value.
 	// This is why we always use var for zero value because not every type when we create an empty
 	// literal we have its zero value in return.
@@ -199,6 +204,35 @@ func main() {
 	// Slice and reference
 	// -------------------
 
+	fmt.Printf("\n=> Slice and reference\n")
+
+	// Declare a slice of 3 users.
+	users := make([]user, 3)
+
+	// Share the user at index 1.
+	shareUser := &users[1]
+
+	// Add a like for the user that was shared.
+	shareUser.likes++
+
+	// Display the number of likes for all users.
+	for i := range users {
+		fmt.Printf("User: %d Likes: %d\n", i, users[i].likes)
+	}
+
+	// Add a new user.
+	users = append(users, user{})
+
+	// Add another like for the user that was shared.
+	shareUser.likes++
+
+	// Display the number of likes for all users.
+	fmt.Println("*************************")
+	for i := range users {
+		fmt.Printf("User: %d Likes: %d\n", i, users[i].likes)
+	}
+	// Notice the last like has not been recorded.
+
 	// Declare a slice of integers with 7 values.
 	x := make([]int, 7)
 
@@ -218,6 +252,7 @@ func main() {
 
 	// When we change the value of the second element of the slice, twohundred is not gonna change
 	// because it points to the old slice. Everytime we read it, we will get the wrong value.
+	// Another important point: OLD backing array can never be garbage collected because "twohundred" still points to that memory location. Therefore, it causes memory leak.
 	x[1]++
 
 	// By printing out the output, we can see that we are in trouble.
