@@ -49,6 +49,12 @@ func main() {
 		fmt.Println(key, value)
 	}
 
+	// Iterate over the map KEYS only.
+	fmt.Printf("\n=> Map key literals\n")
+	for key := range users2 {
+		fmt.Println(key)
+	}
+
 	// ----------
 	// Delete key
 	// ----------
