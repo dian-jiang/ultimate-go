@@ -75,7 +75,7 @@ func main() {
 	// copy of data. displayName uses a value receiver so it works on its own copy. When we make
 	// an assignment to f1, we are having a copy of d.
 	//  -----
-	// |  *  | --> code
+	// |  *  | --> code displayName method
 	//  -----
 	// |  *  | --> copy of d
 	//  -----

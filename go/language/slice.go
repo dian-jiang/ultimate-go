@@ -308,6 +308,27 @@ func main() {
 		// Display the details.
 		fmt.Printf("%2d: %q; codepoint: %#6x; encoded bytes: %#v\n", i, r, r, buf[:rl])
 	}
+
+	// -----
+	// Range mechanics
+	// -----
+	fmt.Printf("\n=> Range mechanics\n")
+
+	// Using the value semantic form of the for range.
+	// The following code runs. Even though we are mutating the length of friends inside the looop, we are ranging through the COPY of friends. (not the copy of the backing array, but friends SLICE.)
+	friends := []string{"Annie", "Betty", "Charley", "Doug", "Edward"}
+	for _, v := range friends {
+		friends = friends[:2]
+		fmt.Printf("v[%s]\n", v)
+	}
+
+	// Using the pointer semantic form of the for range.
+	// The following code panic.
+	// friends = []string{"Annie", "Betty", "Charley", "Doug", "Edward"}
+	// for i := range friends {
+	// 	friends = friends[:2]
+	// 	fmt.Printf("v[%s]\n", friends[i])
+	// }
 }
 
 // inspectSlice exposes the slice header for review.
